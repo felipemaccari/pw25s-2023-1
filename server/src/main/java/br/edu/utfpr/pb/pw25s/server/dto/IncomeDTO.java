@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class RevenueDTO {
+public class IncomeDTO {
 
     private long id;
 
@@ -23,10 +23,10 @@ public class RevenueDTO {
     @NotNull
     private Date entryDate;
 
-    private Date receiptDate;
+    private Date paymentDate;
 
     @NotNull
-    private BigDecimal revenueValue;
+    private BigDecimal incomeValue;
 
     @NotNull
     private CategoryDTO category;

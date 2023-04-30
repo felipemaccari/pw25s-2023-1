@@ -8,13 +8,13 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
 @Entity
-@Table(name = "revenues")
+@Table(name = "incomes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(of = {"id"})
-public class Revenue {
+public class Income {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private long id;
@@ -29,10 +29,10 @@ public class Revenue {
     private Date entryDate;
 
     @Column
-    private Date receiptDate;
+    private Date paymentDate;
 
     @NotNull
-    private BigDecimal revenueValue;
+    private BigDecimal incomeValue;
 
     @NotNull
     @ManyToOne

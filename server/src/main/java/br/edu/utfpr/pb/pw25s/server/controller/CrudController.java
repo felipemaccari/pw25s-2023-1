@@ -69,7 +69,6 @@ public abstract class CrudController <T, D, ID extends Serializable> {
     @PutMapping("{id}")
     public ResponseEntity<D> update(@PathVariable ID id, @RequestBody @Valid D entity) {
         return ResponseEntity.status(HttpStatus.OK).body(convertToDto(getService().save(convertToEntity(entity))));
-
     }
 
     @GetMapping("exists/{id}")
