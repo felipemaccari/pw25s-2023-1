@@ -9,13 +9,13 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "incomes")
+@Table(name = "transactions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(of = {"id"})
-public class Income {
+public class Transaction {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private long id;
@@ -30,13 +30,18 @@ public class Income {
     private Date entryDate;
 
     @Column
-    private Date paymentDate;
+    private Date transactionDate;
 
     @NotNull
-    private BigDecimal incomeValue;
+    private BigDecimal transactionValue;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "bank_account_id", referencedColumnName = "id")
+    private BankAccount bankAccount;
 }
