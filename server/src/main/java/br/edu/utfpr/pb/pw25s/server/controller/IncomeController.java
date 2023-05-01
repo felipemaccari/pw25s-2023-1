@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/incomes")
+@RequestMapping("incomes")
 public class IncomeController extends CrudController<Income, IncomeDTO, Long> {
     private static IncomeService incomeService;
 
