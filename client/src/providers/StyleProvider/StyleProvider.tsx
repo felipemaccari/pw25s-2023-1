@@ -2,18 +2,15 @@ import { ReactNode } from "react";
 
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-import "@fontsource-variable/inter";
-
 interface StyleProviderProps {
   children: ReactNode;
 }
 
-const theme = extendTheme({
-  colors: {
-    //brand
-    primary: "#134074",
-    secondary: "#8DA9C4",
-
+const colors = {
+  //brand
+  primary: "#134074",
+  secondary: "#8DA9C4",
+  utils: {
     //utils
     red: "#ED6A5E",
     green: "#4CE0B3",
@@ -26,10 +23,9 @@ const theme = extendTheme({
     almostblack: "#222222",
     black: "#000000",
   },
-  fonts: {
-    body: `'Inter Variable', sans-serif;`,
-  },
-});
+};
+
+const theme = extendTheme({ colors });
 
 const StyleProvider: React.FC<StyleProviderProps> = ({ children }) => {
   return <ChakraProvider theme={theme}>{children}</ChakraProvider>;

@@ -1,9 +1,9 @@
 import axios from "axios";
 
+const baseURL = import.meta.env.VITE_BASE_URL;
+
 export const getApi = async () => {
-  const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_HOST,
-  });
+  const api = axios.create();
 
   const tokenFrom = "";
 
@@ -42,5 +42,5 @@ export const handleFetchRequests = async (
 ) => {
   const api = await getApi();
 
-  return await api[method](requestURL, payload);
+  return await api[method](`${baseURL}/${requestURL}`, payload);
 };

@@ -8,9 +8,7 @@ import { AuthContext } from "../AuthProvider";
 import LoginPage from "../../pages/LoginPage/LoginPage";
 
 const RoutesProvider: React.FC = () => {
-  const { name } = useContext(AuthContext);
-
-  console.log(name);
+  const { token } = useContext(AuthContext);
 
   const authenticatedRoutes = [
     {
@@ -34,7 +32,9 @@ const RoutesProvider: React.FC = () => {
     },
   ];
 
-  const router = createBrowserRouter(name ? authenticatedRoutes : publicRoutes);
+  const router = createBrowserRouter(
+    token ? authenticatedRoutes : publicRoutes
+  );
 
   return <RouterProvider router={router} />;
 };

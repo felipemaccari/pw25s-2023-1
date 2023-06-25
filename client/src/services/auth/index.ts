@@ -4,6 +4,7 @@ import { handleFetchRequests } from "..";
 
 export const useMutationAuth = (options: MutationOptions) =>
   useMutation({
-    mutationFn: async () => await handleFetchRequests("post", "login", {}),
+    mutationFn: async (data: any) =>
+      await handleFetchRequests("post", "login", data),
     ...options,
   });

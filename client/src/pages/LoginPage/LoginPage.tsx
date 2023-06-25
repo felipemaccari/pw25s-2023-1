@@ -6,6 +6,7 @@ import {
   Button,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
   Text,
@@ -17,7 +18,11 @@ import { useMutationAuth } from "../../services/auth";
 const LoginPage: React.FC = () => {
   const { login } = useContext(AuthContext);
 
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const toast = useToast();
 
@@ -31,13 +36,9 @@ const LoginPage: React.FC = () => {
         duration: 9000,
         isClosable: true,
       });
-
-      return;
     },
     onSuccess: ({ data }: any) => {
-      localStorage.setItem("USER", data.token);
-
-      window.location.reload();
+      login(data.token);
     },
   });
 
@@ -46,39 +47,60 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <Flex
-      background="#F7F8FA"
-      direction="column"
-      align="center"
-      justify="center"
-      height="100vh"
-      width="100%"
-    >
-      <Flex direction="column">
-        <Text fontSize="2rem" mb="100px">
-          Sistema Financeiro
-        </Text>
+    <Flex height="100vh" width="100%" align="center" justify="center">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Flex direction="column">
+          <Text
+            fontWeight="bold"
+            fontSize="1.5rem"
+            mb="50px"
+            textDecor="underline"
+          >
+            Sistema Financeiro
+          </Text>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isRequired mb="30px">
-            <FormLabel>Nome de usuário</FormLabel>
-            <Input placeholder="nomeUsuario" {...register("username")} />
-          </FormControl>
-
-          <FormControl isRequired mb="30px">
-            <FormLabel>Senha</FormLabel>
+          <FormControl isInvalid={!!errors.username}>
+            <FormLabel htmlFor="username">Usuário</FormLabel>
             <Input
-              type="password"
-              placeholder="*********"
-              {...register("password")}
+              id="username"
+              type="text"
+              placeholder="Seu nome de usuário"
+              {...register("username", {
+                required: "O nome de usuário é obrigatório!",
+              })}
             />
+
+            {errors.username && (
+              <FormErrorMessage>Usuário incorreto</FormErrorMessage>
+            )}
           </FormControl>
 
-          <Button type="submit" width="100%" background="primary" color="white">
+          <FormControl mt="30px" isInvalid={!!errors.password}>
+            <FormLabel htmlFor="password">Senha</FormLabel>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Sua senha"
+              {...register("password", { required: "A senha é obrigatória" })}
+            />
+
+            {errors.password && (
+              <FormErrorMessage>Senha incorreta</FormErrorMessage>
+            )}
+          </FormControl>
+
+          <Button
+            background="primary"
+            color="white"
+            mt="50px"
+            type="submit"
+            isLoading={isLoading}
+            isDisabled={isLoading}
+          >
             Login
           </Button>
-        </form>
-      </Flex>
+        </Flex>
+      </form>
     </Flex>
   );
 };
