@@ -41,7 +41,7 @@ export const AccountsManagementList = () => {
 
         <Tbody>
           {data.data.map((account: any) => (
-            <Tr>
+            <Tr key={account.id}>
               <Td>{account.description}</Td>
               <Td>{account.account}</Td>
               <Td>{account.agency}</Td>

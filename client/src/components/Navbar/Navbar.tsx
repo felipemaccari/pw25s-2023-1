@@ -42,6 +42,10 @@ export const Navbar = () => {
         <Text mx="10px" fontWeight="bold" textDecor="underline">
           <Link to="/accounts">Minhas Contas</Link>
         </Text>
+
+        <Text mx="10px" fontWeight="bold" textDecor="underline">
+          <Link to="/transactions">Transações</Link>
+        </Text>
       </Flex>
 
       <Menu>

@@ -6,7 +6,7 @@ import { CategoriesManagementCreateModal } from "./components/CategoriesManageme
 const Categories: React.FC = () => (
   <Box>
     <Text fontSize="2rem" fontWeight="semiBold">
-      Categorias de Despesa
+      Categorias de Transação
     </Text>
 
     <CategoriesManagementCreateModal />

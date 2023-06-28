@@ -13,44 +13,45 @@ import {
 } from "@chakra-ui/react";
 
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useMutationDeleteAccount } from "../../../services/accounts";
-import { useQueryClient } from "@tanstack/react-query";
-import { Account } from "../types";
 
-const CategoriesManagementListActionsDelete: React.FC<Account> = ({
-  account,
+import { useQueryClient } from "@tanstack/react-query";
+import { Transaction } from "./types";
+import { useMutationDeleteTransaction } from "../../services/transactions";
+
+const TransactionsListActionsDelete: React.FC<Transaction> = ({
+  transaction,
 }) => {
   const queryClient = useQueryClient();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { mutate, isLoading } = useMutationDeleteAccount({
+  const { mutate, isLoading } = useMutationDeleteTransaction({
     onSuccess: () => {
-      queryClient.invalidateQueries(["useQueryAccounts"]);
+      queryClient.invalidateQueries(["useQueryTransactions"]);
     },
   });
 
-  const handleDeleteCategory = () => {
-    mutate(account.id);
+  const handleDeleteTransaction = () => {
+    mutate(transaction.id);
   };
 
   return (
     <Flex justify="end">
       <MenuItem onClick={onOpen} icon={<DeleteIcon />}>
-        Excluir Conta
+        Excluir Transação
       </MenuItem>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Editar Conta</ModalHeader>
+          <ModalHeader>Remover Transação</ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb="30px">Deseja remover a Conta?</ModalBody>
+          <ModalBody pb="30px">Deseja remover a transação?</ModalBody>
 
           <ModalFooter justifyContent="space-between">
             <Button onClick={onClose}>Cancelar</Button>
 
-            <Button isLoading={isLoading} onClick={handleDeleteCategory}>
+            <Button isLoading={isLoading} onClick={handleDeleteTransaction}>
               Remover
             </Button>
           </ModalFooter>
@@ -60,4 +61,4 @@ const CategoriesManagementListActionsDelete: React.FC<Account> = ({
   );
 };
 
-export default CategoriesManagementListActionsDelete;
+export default TransactionsListActionsDelete;

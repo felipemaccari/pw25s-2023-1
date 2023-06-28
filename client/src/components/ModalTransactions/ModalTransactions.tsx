@@ -2,10 +2,8 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
   Tab,
   Tabs,
   TabList,
@@ -14,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 
 import { ModalTransactionsOperations } from "./ModalTransactionsOperations";
+import { ModalTransactionsOperationsTransference } from "./ModalTransactionsOperationsTransference";
 
 interface ModalTransactionsProps {
   isOpen: boolean;
@@ -41,17 +40,12 @@ export const ModalTransactions = ({
               <TabPanel>
                 <ModalTransactionsOperations />
               </TabPanel>
-              <TabPanel>Transferencias</TabPanel>
+              <TabPanel>
+                <ModalTransactionsOperationsTransference />
+              </TabPanel>
             </TabPanels>
           </Tabs>
         </ModalBody>
-
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
-            Close
-          </Button>
-          <Button variant="ghost">Secondary Action</Button>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );

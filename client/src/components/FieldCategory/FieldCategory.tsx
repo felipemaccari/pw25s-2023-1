@@ -1,10 +1,11 @@
 import { Select } from "@chakra-ui/react";
+
 import { useQueryCategories } from "../../services/categories";
 
 export const FieldCategory = ({ ...props }) => {
   const { data, isLoading }: any = useQueryCategories();
 
-  if (data?.length === 0 && !isLoading) {
+  if (data?.data.length === 0 && !isLoading) {
     return (
       <Select
         disabled
@@ -21,8 +22,10 @@ export const FieldCategory = ({ ...props }) => {
       isDisabled={isLoading}
       {...props}
     >
-      {data?.map((category: any) => (
-        <option value={category.id}>{category.name}</option>
+      {data?.data.map((category: any) => (
+        <option key={category.id} value={category.id}>
+          {category.name}
+        </option>
       ))}
     </Select>
   );

@@ -1,48 +1,39 @@
 import { Controller, useForm } from "react-hook-form";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 import {
   Button,
   Text,
-  RadioGroup,
-  Stack,
-  Radio,
   FormControl,
   FormLabel,
   Flex,
   Input,
   FormErrorMessage,
+  Box,
   NumberInput,
+  NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  NumberInputField,
   useToast,
+  RadioGroup,
+  Stack,
+  Radio,
 } from "@chakra-ui/react";
 
-import { TRANSACTION_TYPES } from "./constants";
+import { Transaction } from "./types";
+import { useMutationUpdateTransaction } from "../../services/transactions";
+import { TRANSACTION_TYPES } from "../../components/ModalTransactions/constants";
+import { FieldCategory } from "../../components/FieldCategory";
+import { FieldBankAccount } from "../../components/FieldBankAccount";
 
-import { FieldCategory } from "../FieldCategory";
-import { FieldBankAccount } from "../FieldBankAccount";
-import { useMutationCreateTransaction } from "../../services/transactions";
-import { useQueryClient } from "@tanstack/react-query";
-
-export const ModalTransactionsOperations = () => {
+export const TransactionsListActionsEditForm: React.FC<Transaction> = ({
+  transaction,
+}) => {
   const queryClient = useQueryClient();
 
   const toast = useToast();
-
-  const { mutate, isLoading } = useMutationCreateTransaction({
-    onSuccess: () => {
-      queryClient.invalidateQueries(["useQueryTransactions"]);
-
-      toast({
-        title: "Transação cadastrada",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
-      });
-    },
-  });
 
   const {
     register,
@@ -51,32 +42,29 @@ export const ModalTransactionsOperations = () => {
     control,
   } = useForm({
     defaultValues: {
-      transactionType: TRANSACTION_TYPES.revenue,
-      description: "",
-      transactionValue: 0.0,
-      entryDate: null,
-      transactionDate: null,
-      category: null,
-      bankAccount: null,
+      description: transaction.description,
+      entryDate: transaction.entryDate,
+      transactionDate: transaction.transactionDate,
+      transactionValue: transaction.transactionValue,
+      category: transaction.category,
+      bankAccount: transaction.bankAccount,
+      transactionType:
+        transaction.transactionValue > 0
+          ? TRANSACTION_TYPES.revenue
+          : TRANSACTION_TYPES.expense,
+    },
+  });
+
+  const { mutate, isLoading } = useMutationUpdateTransaction({
+    onSuccess: () => {
+      queryClient.invalidateQueries(["useQueryAccounts"]);
     },
   });
 
   const onSubmit = async (data: any) => {
-    const payload = {
-      ...data,
-      category: {
-        id: data.category,
-      },
-      bankAccount: {
-        id: data.bankAccount,
-      },
-      transactionValue:
-        data.transactionType === TRANSACTION_TYPES.expense
-          ? data.transactionValue * -1
-          : data.transactionValue,
-    };
+    const formData = { id: transaction.id, ...data };
 
-    mutate(payload);
+    await mutate(formData);
   };
 
   return (

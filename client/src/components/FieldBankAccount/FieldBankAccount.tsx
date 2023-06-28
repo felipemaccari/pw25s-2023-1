@@ -1,11 +1,11 @@
 import { Select } from "@chakra-ui/react";
 
-import { useQueryBankAccount } from "../../services/accounts";
+import { useQueryAccounts } from "../../services/accounts";
 
 export const FieldBankAccount = ({ ...props }) => {
-  const { data, isLoading }: any = useQueryBankAccount();
+  const { data, isLoading }: any = useQueryAccounts();
 
-  if (data?.length === 0 && !isLoading) {
+  if (data?.data.length === 0 && !isLoading) {
     return (
       <Select
         disabled
@@ -17,13 +17,11 @@ export const FieldBankAccount = ({ ...props }) => {
   }
 
   return (
-    <Select
-      placeholder="Selecione a conta bancária"
-      isDisabled={isLoading}
-      {...props}
-    >
-      {data?.map((account: any) => (
-        <option value={account.id}>{account.name}</option>
+    <Select placeholder="Selecione a Conta" isDisabled={isLoading} {...props}>
+      {data?.data.map((account: any) => (
+        <option key={account.id} value={account.id}>
+          {account.description}
+        </option>
       ))}
     </Select>
   );

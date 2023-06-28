@@ -8,6 +8,7 @@ import Categories from "../../pages/Categories/Categories";
 import Register from "../../pages/Register/Register";
 import Profile from "../../pages/Profile/Profile";
 import Accounts from "../../pages/Accounts/Accounts";
+import Transactions from "../../pages/Transactions/Transactions";
 
 const RoutesProvider: React.FC = () => {
   const userInformation = localStorage.getItem("token");
@@ -32,6 +33,11 @@ const RoutesProvider: React.FC = () => {
           {
             path: "profile",
             element: <Profile />,
+            errorElement: <ErrorPage />,
+          },
+          {
+            path: "transactions",
+            element: <Transactions />,
             errorElement: <ErrorPage />,
           },
         ],
