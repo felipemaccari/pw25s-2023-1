@@ -5,19 +5,20 @@ const baseURL = import.meta.env.VITE_BASE_URL;
 export const getApi = async () => {
   const api = axios.create();
 
-  const tokenFrom = "";
+  const token = localStorage.getItem("token");
 
   api.interceptors.request.use(
     (config) => {
-      config.headers.Authorization = "Bearer " + tokenFrom;
+      if (token) {
+        config.headers.Authorization = "Bearer " + token;
+      }
+
       return config;
     },
     (error) => {
       Promise.reject(error);
     }
   );
-
-  api.defaults.headers.common.Authorization = `Bearer ${tokenFrom}`;
 
   api.interceptors.response.use(
     function (response) {
@@ -36,11 +37,21 @@ export const getApi = async () => {
 };
 
 export const handleFetchRequests = async (
-  method: "post" | "get",
+  method: "post" | "get" | "put" | "delete",
   requestURL: string,
-  payload: any
+  payload?: any
 ) => {
   const api = await getApi();
 
-  return await api[method](`${baseURL}/${requestURL}`, payload);
+  const data = await api[method](`${baseURL}/${requestURL}`, payload)
+    .then((data) => {
+      if (data) {
+        return { success: true, data: data.data };
+      }
+    })
+    .catch((data) => {
+      return { success: false, ...data.response.data };
+    });
+
+  return data;
 };

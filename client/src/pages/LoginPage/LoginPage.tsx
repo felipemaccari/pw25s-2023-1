@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { AuthContext } from "../../providers/AuthProvider";
 import { useMutationAuth } from "../../services/auth";
+import { Link } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
   const { login } = useContext(AuthContext);
@@ -37,7 +38,9 @@ const LoginPage: React.FC = () => {
         isClosable: true,
       });
     },
-    onSuccess: ({ data }: any) => {
+    onSuccess: (dataLogin: any) => {
+      const { data } = dataLogin;
+
       login(data.token);
     },
   });
@@ -52,9 +55,10 @@ const LoginPage: React.FC = () => {
         <Flex direction="column">
           <Text
             fontWeight="bold"
-            fontSize="1.5rem"
+            fontSize="2rem"
             mb="50px"
             textDecor="underline"
+            align="center"
           >
             Sistema Financeiro
           </Text>
@@ -92,13 +96,17 @@ const LoginPage: React.FC = () => {
           <Button
             background="primary"
             color="white"
-            mt="50px"
+            mt="30px"
             type="submit"
             isLoading={isLoading}
             isDisabled={isLoading}
           >
             Login
           </Button>
+
+          <Text fontWeight="bold" textDecor="underline" mt="30px">
+            <Link to="/register">Não possui conta? Cadastre-se agora!</Link>
+          </Text>
         </Flex>
       </form>
     </Flex>

@@ -1,40 +1,58 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-import Root from "../../routes/root";
 import ErrorPage from "../../pages/Error";
-import Contact from "../../pages/contact";
-import { useContext } from "react";
-import { AuthContext } from "../AuthProvider";
 import LoginPage from "../../pages/LoginPage/LoginPage";
 
+import { RootAuthComponent } from "../../components/RootAuthComponent";
+import Categories from "../../pages/Categories/Categories";
+import Register from "../../pages/Register/Register";
+import Profile from "../../pages/Profile/Profile";
+import Accounts from "../../pages/Accounts/Accounts";
+
 const RoutesProvider: React.FC = () => {
-  const { token } = useContext(AuthContext);
+  const userInformation = localStorage.getItem("token");
 
-  const authenticatedRoutes = [
-    {
-      path: "/",
-      element: <Root />,
-      errorElement: <ErrorPage />,
-      children: [
-        {
-          path: "contacts/:contactId",
-          element: <Contact />,
-        },
-      ],
-    },
-  ];
+  if (userInformation) {
+    const router = createBrowserRouter([
+      {
+        path: "/",
+        element: <RootAuthComponent />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: "categories",
+            element: <Categories />,
+            errorElement: <ErrorPage />,
+          },
+          {
+            path: "accounts",
+            element: <Accounts />,
+            errorElement: <ErrorPage />,
+          },
+          {
+            path: "profile",
+            element: <Profile />,
+            errorElement: <ErrorPage />,
+          },
+        ],
+      },
+    ]);
 
-  const publicRoutes = [
+    return <RouterProvider router={router} />;
+  }
+
+  const router = createBrowserRouter([
     {
       path: "/",
       element: <LoginPage />,
       errorElement: <ErrorPage />,
     },
-  ];
-
-  const router = createBrowserRouter(
-    token ? authenticatedRoutes : publicRoutes
-  );
+    {
+      path: "/register",
+      element: <Register />,
+      errorElement: <ErrorPage />,
+    },
+  ]);
 
   return <RouterProvider router={router} />;
 };

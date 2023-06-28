@@ -9,12 +9,10 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class BankAccountBalanceDTO {
     @NotNull
     @Size(min = 2, max = 256)
     private String description;
 
-    private BigDecimal currentBalance;
+    private BigDecimal initialBalance;
 }

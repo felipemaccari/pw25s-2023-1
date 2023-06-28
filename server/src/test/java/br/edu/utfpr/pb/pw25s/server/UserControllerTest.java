@@ -31,7 +31,6 @@ public class UserControllerTest {
     @Autowired
     private UserRepository userRepository;
 
-
     @BeforeEach
     public void cleanup() {
         userRepository.deleteAll();

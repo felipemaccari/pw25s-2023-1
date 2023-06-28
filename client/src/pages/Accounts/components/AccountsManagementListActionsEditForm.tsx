@@ -1,0 +1,157 @@
+import { useForm } from "react-hook-form";
+
+import { useQueryClient } from "@tanstack/react-query";
+
+import {
+  Button,
+  Text,
+  FormControl,
+  FormLabel,
+  Flex,
+  Input,
+  FormErrorMessage,
+  Box,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from "@chakra-ui/react";
+
+import { useMutationUpdateAccount } from "../../../services/accounts";
+import { Account } from "../types";
+
+export const AccountsManagementListActionsEditForm: React.FC<Account> = ({
+  account,
+}) => {
+  const queryClient = useQueryClient();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      description: account.description,
+      account: account.account,
+      agency: account.agency,
+      initialBalance: account.initialBalance,
+    },
+  });
+
+  const { mutate, isLoading } = useMutationUpdateAccount({
+    onSuccess: () => {
+      queryClient.invalidateQueries(["useQueryAccounts"]);
+    },
+  });
+
+  const onSubmit = async (data: any) => {
+    const formData = { id: account.id, ...data };
+
+    await mutate(formData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Flex direction="column" align="center">
+        <FormControl mt="20px" isInvalid={!!errors.description}>
+          <FormLabel htmlFor="description">Descrição</FormLabel>
+          <Input
+            id="description"
+            type="text"
+            placeholder="Descrição"
+            isDisabled={isLoading}
+            {...register("description", {
+              required: true,
+            })}
+          />
+
+          {errors.description && (
+            <FormErrorMessage>
+              <Text>A descrição é obrigatória</Text>
+            </FormErrorMessage>
+          )}
+        </FormControl>
+
+        <Flex width="100%">
+          <FormControl mt="20px" isInvalid={!!errors.account} mr="30px">
+            <FormLabel htmlFor="account">Conta Bancária</FormLabel>
+            <Input
+              id="account"
+              type="text"
+              placeholder="Conta Bancária"
+              isDisabled={isLoading}
+              {...register("account", {
+                required: true,
+              })}
+            />
+
+            {errors.description && (
+              <FormErrorMessage>
+                <Text>A Conta Bancária é obrigatória</Text>
+              </FormErrorMessage>
+            )}
+          </FormControl>
+
+          <FormControl mt="20px" isInvalid={!!errors.agency}>
+            <FormLabel htmlFor="agency">Agência</FormLabel>
+            <Input
+              id="agency"
+              type="text"
+              placeholder="Agência"
+              isDisabled={isLoading}
+              {...register("agency", {
+                required: true,
+              })}
+            />
+
+            {errors.description && (
+              <FormErrorMessage>
+                <Text>A Agência é obrigatória</Text>
+              </FormErrorMessage>
+            )}
+          </FormControl>
+        </Flex>
+
+        <FormControl mt="20px" isInvalid={!!errors.initialBalance}>
+          <FormLabel htmlFor="initialBalance">Saldo Inicial</FormLabel>
+          <NumberInput
+            id="initialBalance"
+            defaultValue={0}
+            precision={2}
+            step={0.1}
+          >
+            <NumberInputField
+              placeholder="Saldo Inicial"
+              {...register("initialBalance", {
+                required: true,
+              })}
+            />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
+
+          {errors.description && (
+            <FormErrorMessage>
+              <Text>A Saldo Inicial é obrigatória</Text>
+            </FormErrorMessage>
+          )}
+        </FormControl>
+
+        <Button
+          background="primary"
+          color="white"
+          mt="50px"
+          type="submit"
+          w="20%"
+          isLoading={isLoading}
+          isDisabled={isLoading}
+        >
+          Salvar
+        </Button>
+      </Flex>
+    </form>
+  );
+};
